@@ -6,6 +6,7 @@ import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
 import Programs from "./components/Programs";
 import Space from "./components/Space";
+import WhySection from "./components/WhySection";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Hero />
       <Programs />
       <Space />
+      <WhySection />
       <Contact />
       <Footer />
     </>

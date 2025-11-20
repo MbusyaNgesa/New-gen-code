@@ -13,9 +13,48 @@ const ContactForm = () => {
     email: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus({
+          type: "success",
+          message: "Message sent successfully! We'll get back to you soon.",
+        });
+        setFormData({ firstName: "", lastName: "", phone: "", email: "" });
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message: "Failed to send message. Please try again.",
+        });
+      }
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message: "An error occurred. Please try again later.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
